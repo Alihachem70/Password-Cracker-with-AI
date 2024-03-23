@@ -1,0 +1,21 @@
+import openai
+
+# Set your OpenAI API key
+openai.api_key = 'API key'
+
+def generate_guess(password):
+    response = openai.Completion.create(
+        engine="text-codex", # Choose the appropriate engine
+        prompt=f"Guess the password: {password}. The password is likely to contain:",
+        max_tokens=50,
+        n=5,  # Number of guesses to generate
+        stop=None,
+    )
+    guesses = [choice["text"].strip() for choice in response["choices"]]
+    return guesses
+
+password_to_crack = input("Enter the password to crack: ")
+print("Generating password guesses...")
+guesses = generate_guess(password_to_crack)
+for i, guess in enumerate(guesses, 1):
+    print(f"Guess {i}: {guess}")
